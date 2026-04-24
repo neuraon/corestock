@@ -1,0 +1,49 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="70" x2="1080" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.06"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#020617" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" rx="48" fill="url(#bg)"/>
+  <circle cx="1030" cy="120" r="140" fill="#38BDF8" fill-opacity="0.16"/>
+  <circle cx="170" cy="510" r="170" fill="#14B8A6" fill-opacity="0.14"/>
+  <path d="M0 540C180 430 300 460 430 500C580 545 710 570 860 515C960 479 1060 440 1200 470V630H0V540Z" fill="#08101F" fill-opacity="0.42"/>
+
+  <g filter="url(#shadow)">
+    <rect x="88" y="78" width="620" height="474" rx="34" fill="#0B1220" fill-opacity="0.62" stroke="#FFFFFF" stroke-opacity="0.12"/>
+    <rect x="760" y="104" width="352" height="400" rx="30" fill="url(#card)" stroke="#FFFFFF" stroke-opacity="0.14"/>
+  </g>
+
+  <text x="132" y="164" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3">CORESTOCK INDIA</text>
+  <text x="132" y="250" fill="#FFFFFF" font-family="Merriweather, Georgia, serif" font-size="62" font-weight="900">Blog Feature</text>
+  <text x="132" y="320" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">Market basics, daily updates,</text>
+  <text x="132" y="360" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">analysis, and investing guides.</text>
+
+  <g transform="translate(132 406)">
+    <rect width="220" height="58" rx="18" fill="#38BDF8"/>
+    <text x="110" y="38" text-anchor="middle" fill="#082F49" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">FEATURE IMAGE</text>
+  </g>
+
+  <g transform="translate(810 140)">
+    <rect width="270" height="26" rx="13" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect y="48" width="300" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.22"/>
+    <rect y="82" width="220" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.16"/>
+
+    <g transform="translate(0 150)">
+      <rect width="270" height="160" rx="22" fill="#0F172A" fill-opacity="0.62" stroke="#FFFFFF" stroke-opacity="0.10"/>
+      <path d="M24 122L72 98L118 104L168 68L222 78L246 44" stroke="#38BDF8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24 122H246" stroke="#E2E8F0" stroke-opacity="0.18"/>
+      <path d="M24 44V122" stroke="#E2E8F0" stroke-opacity="0.18"/>
+      <circle cx="246" cy="44" r="7" fill="#38BDF8"/>
+    </g>
+  </g>
+</svg>

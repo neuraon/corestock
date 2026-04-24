@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoreStock India | Indian Stock Market Insights</title>
+  <meta name="description" content="CoreStock India is a straightforward, fact-driven space for Indian stock market basics, market education, and clear daily updates."/>
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+  <link rel="canonical" href="/"/>
+  <meta property="og:site_name" content="CoreStock India"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="CoreStock India | Indian Stock Market Insights"/>
+  <meta property="og:description" content="Straightforward, fact-driven Indian stock market basics, education, and daily updates."/>
+  <meta property="og:url" content="/"/>
+  <meta property="og:image" content="/assets/featured-image.svg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="CoreStock India | Indian Stock Market Insights"/>
+  <meta name="twitter:description" content="Straightforward, fact-driven Indian stock market basics, education, and daily updates."/>
+  <meta name="twitter:image" content="/assets/featured-image.svg"/>
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/assets/favicon.svg"/>
+  <link rel="shortcut icon" href="/assets/favicon.svg"/>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Merriweather:wght@400;700;900&display=swap');
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; }
+
+    /* ── Ticker tape wrapper ── */
+    .tv-ticker-wrap { background: #0f172a; overflow: hidden; }
+    .tradingview-widget-container { width: 100%; }
+
+    /* ── Post content typography ── */
+    #post-content h1 { font-size:2rem; font-weight:800; margin-bottom:1rem; color:#0f172a; font-family:'Merriweather',serif; }
+    #post-content h2 { font-size:1.4rem; font-weight:700; margin:1.8rem 0 .6rem; color:#1e293b; font-family:'Merriweather',serif; border-bottom:2px solid #e2e8f0; padding-bottom:.4rem; }
+    #post-content h3 { font-size:1.15rem; font-weight:700; margin:1.2rem 0 .4rem; color:#334155; }
+    #post-content p  { margin-bottom:1.1rem; line-height:1.85; color:#374151; font-size:.97rem; }
+    #post-content ul, #post-content ol { margin:.5rem 0 1rem 1.5rem; color:#374151; line-height:1.85; font-size:.97rem; }
+    #post-content ul { list-style:disc; }
+    #post-content ol { list-style:decimal; }
+    #post-content li { margin-bottom:.35rem; }
+    #post-content a  { color:#0ea5e9; text-decoration:underline; }
+    #post-content code { background:#f1f5f9; padding:2px 7px; border-radius:4px; font-family:monospace; font-size:.88em; color:#0f766e; }
+    #post-content pre { background:#0f172a; color:#e2e8f0; padding:1.2rem; border-radius:.75rem; overflow-x:auto; margin-bottom:1.2rem; font-size:.88rem; }
+    #post-content blockquote { border-left:4px solid #0ea5e9; padding:.6rem 1.2rem; background:#f0f9ff; border-radius:0 .6rem .6rem 0; margin-bottom:1.2rem; color:#0369a1; font-style:italic; font-size:.95rem; }
+    #post-content img { max-width:100%; border-radius:.75rem; margin:1rem 0; }
+    #post-content strong { color:#0f172a; font-weight:700; }
+    #post-content table { width:100%; border-collapse:collapse; margin-bottom:1.2rem; font-size:.9rem; }
+    #post-content th { background:#0f172a; color:#fff; padding:.55rem .85rem; text-align:left; }
+    #post-content td { border:1px solid #e2e8f0; padding:.55rem .85rem; }
+    #post-content tr:nth-child(even) td { background:#f8fafc; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+    @keyframes ticker { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    .fade-up { animation: fadeUp .45s ease both; }
+    .page-view {
+      opacity: 0;
+      transform: translateY(18px) scale(.99);
+      transition: opacity .38s ease, transform .38s cubic-bezier(.22, 1, .36, 1);
+      will-change: opacity, transform;
+    }
+    .page-view.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .page-view.is-leaving {
+      opacity: 0;
+      transform: translateY(-10px) scale(.985);
+    }
+
+    /* ── Category pill active ── */
+    .cat-pill { transition: all .2s; cursor:pointer; }
+    .cat-pill.active, .cat-pill:hover { background:#0f172a; color:#fff; border-color:#0f172a; }
+
+    /* ── Post card ── */
+    #posts-container {
+      transition: opacity .22s ease, transform .22s cubic-bezier(.22, 1, .36, 1), filter .22s ease;
+      will-change: opacity, transform;
+    }
+    #posts-container.is-switching {
+      opacity: .24;
+      transform: translateY(10px) scale(.992);
+      filter: blur(.2px);
+      pointer-events: none;
+    }
+
+    .post-card { transition: box-shadow .25s, transform .25s; }
+    .post-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px -8px rgba(14,165,233,.16); }
+
+    /* ── Sidebar tag ── */
+    .s-tag { transition: all .18s; }
+    .s-tag:hover, .s-tag.active { background:#0ea5e9; color:#fff; border-color:#0ea5e9; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:#f1f5f9; }
+    ::-webkit-scrollbar-thumb { background:#94a3b8; border-radius:9999px; }
+
+    /* ── Nav mobile menu ── */
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:block; }
+
+    /* ── Hero gradient text ── */
+    .grad-text { background: linear-gradient(135deg,#0ea5e9,#38bdf8,#7dd3fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+    /* ── Category card ── */
+    .ccat { transition: transform .22s, box-shadow .22s; }
+    .ccat:hover { transform:translateY(-5px); box-shadow:0 14px 36px -6px rgba(0,0,0,.13); }
+
+    /* ── Chart widget height fix ── */
+    .tv-chart-box { height:420px; border-radius:.75rem; overflow:hidden; }
+    @media(max-width:640px){ .tv-chart-box { height:300px; } }
+  </style>
+</head>
+<body class="bg-slate-50">
+
+  <!-- ══════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════ -->
+  <nav class="bg-white border-b border-slate-100 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <button onclick="showFeed()" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center shadow-md">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16l4-8 3 6 2-4 3 4"/>
+            </svg>
+          </div>
+          <div class="leading-tight">
+            <span class="text-lg font-black text-slate-900 tracking-tight">Core<span class="text-sky-500">Stock</span></span>
+          </div>
+        </button>
+
+        <!-- Desktop nav -->
+        <div class="hidden md:flex items-center gap-1 flex-wrap">
+          <button onclick="showFeed()" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition">Home</button>
+          <button onclick="filterCat('Market Basics')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition">Trending</button>
+          <button onclick="filterCat('Daily Updates')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition">Market Updates</button>
+          <button onclick="filterCat('Market Education')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition">Basics</button>
+          <button onclick="filterCat('Analysis')" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-600 hover:text-sky-600 hover:bg-sky-50 transition">Business</button>
+        </div>
+
+        <!-- Search + mobile toggle -->
+        <div class="flex items-center gap-2">
+          <div class="relative hidden sm:block">
+            <input id="search-input" type="text" placeholder="Search articles…"
+              class="pl-9 pr-4 py-2 rounded-full border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300 bg-slate-50 w-48 transition-all focus:w-60"
+              oninput="handleSearch(this.value)" />
+            <svg class="absolute left-3 top-2.5 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </div>
+          <button onclick="toggleMobile()" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition">
+            <svg id="menu-icon" class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="md:hidden pb-4 space-y-1">
+        <div class="relative mb-3">
+          <input id="search-mobile" type="text" placeholder="Search articles…"
+            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300 bg-slate-50"
+            oninput="handleSearch(this.value)" />
+          <svg class="absolute left-3 top-3 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+          </svg>
+        </div>
+        <button onclick="showFeed();toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">🏠 Home</button>
+        <button onclick="filterCat('Market Basics');toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">📈 Trending</button>
+        <button onclick="filterCat('Daily Updates');toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">📰 Market Updates</button>
+        <button onclick="filterCat('Market Education');toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">🎓 Basics</button>
+        <button onclick="filterCat('Analysis');toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">📊 Business</button>
+        <button onclick="showAbout();toggleMobile()" class="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-600 transition">ℹ️ About</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <div id="hero-section" class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white pt-16 pb-20 px-4 relative overflow-hidden">
+    <!-- BG decoration -->
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-sky-500 rounded-full filter blur-3xl"></div>
+      <div class="absolute bottom-0 right-10 w-96 h-96 bg-blue-600 rounded-full filter blur-3xl"></div>
+    </div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center gap-2 bg-sky-500/20 border border-sky-500/30 text-sky-300 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
+        Indian Markets Open — Live Data
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black mb-4 leading-tight tracking-tight">
+        <span class="text-white">Core</span><span class="grad-text">Stock</span>
+      </h1>
+      <p class="text-slate-300 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed mb-8">
+        A straightforward, fact-driven space for <strong class="text-white">Indian stock market basics</strong>, market education, and clear daily updates.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="scrollElementIntoView('categories-section')"
+          class="bg-sky-500 hover:bg-sky-400 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-sky-500/25 text-sm">
+          Browse Categories
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       CATEGORIES LANDING SECTION
+  ══════════════════════════════════════ -->
+  <div id="categories-section" class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-2">Explore by Category</h2>
+      <p class="text-slate-500 text-sm max-w-xl mx-auto">Everything organized so you find what you need — from your first Indian stock to reading an earnings report.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 justify-items-center">
+
+      <!-- Category 1 -->
+      <button onclick="filterCat('Market Basics')" class="ccat w-full max-w-[18rem] bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-left group">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">📈</div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">Trending</h3>
+        <p class="text-slate-500 text-xs leading-relaxed mb-3">Popular market basics and foundational stock market topics.</p>
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Read articles →</span>
+      </button>
+
+      <!-- Category 3 -->
+      <button onclick="filterCat('Daily Updates')" class="ccat w-full max-w-[18rem] bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-left group">
+        <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">📰</div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">Market Updates</h3>
+        <p class="text-slate-500 text-xs leading-relaxed mb-3">Clear, concise daily market recaps with the facts that matter today.</p>
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full">Read articles →</span>
+      </button>
+
+      <!-- Category 4 -->
+      <button onclick="filterCat('Market Education')" class="ccat w-full max-w-[18rem] bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-left group">
+        <div class="w-12 h-12 rounded-xl bg-violet-50 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">🎓</div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">Basics</h3>
+        <p class="text-slate-500 text-xs leading-relaxed mb-3">How markets work, order types, and investing fundamentals.</p>
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-full">Read articles →</span>
+      </button>
+
+      <!-- Category 5 -->
+      <button onclick="filterCat('Analysis')" class="ccat w-full max-w-[18rem] bg-white rounded-2xl border border-slate-100 shadow-sm p-6 text-left group">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">📊</div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">Business</h3>
+        <p class="text-slate-500 text-xs leading-relaxed mb-3">Technical and fundamental analysis, charts, earnings, and sectors.</p>
+        <span class="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">Read articles →</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT AREA
+  ══════════════════════════════════════ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+
+    <!-- ── FEED VIEW ── -->
+    <div id="feed-view" class="page-view is-visible">
+
+      <!-- Category filter pills -->
+      <div class="mb-6 flex justify-start">
+        <div class="inline-flex flex-wrap items-center justify-start gap-2 rounded-3xl border border-slate-200 bg-white/90 shadow-sm px-3 py-3 backdrop-blur">
+          <span class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 px-2">Filter:</span>
+          <button onclick="filterCat(null)" class="cat-pill active text-xs font-semibold px-4 py-2 rounded-full border border-slate-200 bg-slate-900 text-white shadow-sm" data-cat="all">ALL</button>
+          <button onclick="filterCat('Market Basics')" class="cat-pill text-xs font-semibold px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700" data-cat="Market Basics">📈 Trending</button>
+          <button onclick="filterCat('Daily Updates')" class="cat-pill text-xs font-semibold px-4 py-2 rounded-full border border-sky-200 bg-sky-50 text-sky-700" data-cat="Daily Updates">📰 Market Updates</button>
+          <button onclick="filterCat('Market Education')" class="cat-pill text-xs font-semibold px-4 py-2 rounded-full border border-violet-200 bg-violet-50 text-violet-700" data-cat="Market Education">🎓 Basics</button>
+          <button onclick="filterCat('Analysis')" class="cat-pill text-xs font-semibold px-4 py-2 rounded-full border border-amber-200 bg-amber-50 text-amber-700" data-cat="Analysis">📊 Business</button>
+        </div>
+      </div>
+
+      <div id="category-filter-drawer" class="mb-8 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 ease-out" style="max-height:0;opacity:0;transform:translateY(-8px);pointer-events:none;">
+        <div class="p-5 sm:p-6">
+          <div class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-4 sm:p-5">
+            <div class="min-h-[140px] rounded-2xl border border-slate-200 bg-white shadow-inner"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:flex-row gap-8">
+
+        <!-- Posts grid -->
+        <section class="flex-1 min-w-0">
+          <div id="posts-count" class="text-xs text-slate-400 mb-4 font-semibold uppercase tracking-wide"></div>
+          <div id="posts-container" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
+          <div id="feed-pagination" class="mt-8 flex justify-center"></div>
+          <div id="no-results" class="hidden text-center py-24 text-slate-400">
+            <div class="text-5xl mb-3">🔍</div>
+            <p class="text-lg font-bold text-slate-500">No articles found</p>
+            <p class="text-sm mt-1">Try a different search or category.</p>
+          </div>
+          <div id="loading-indicator" class="text-center py-20 text-slate-400">
+            <div class="w-8 h-8 border-4 border-sky-200 border-t-sky-500 rounded-full animate-spin mx-auto mb-3"></div>
+            <p class="text-sm">Loading articles…</p>
+          </div>
+        </section>
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-72 shrink-0 space-y-5">
+
+          <!-- Mini Market Overview widget -->
+          <!-- Live Market Overview card removed as requested -->
+
+          <!-- Recent posts -->
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">🕐 Recent Articles</h3>
+            <ul id="recent-list" class="space-y-3"></ul>
+          </div>
+
+          <!-- Add post guide -->
+          <!-- Add post guide card removed as requested -->
+
+        </aside>
+      </div>
+    </div>
+
+    <!-- ── POST VIEW ── -->
+    <div id="post-view" class="page-view hidden pt-3 sm:pt-5">
+      <button onclick="showFeed()" class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white px-4 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-300 hover:bg-sky-50 hover:text-sky-900 mb-6 group">
+        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-sky-700 group-hover:bg-sky-200 transition">
+          <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </span>
+        Back to Feed
+      </button>
+      <div class="flex flex-col items-center">
+        <article class="w-full max-w-4xl bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-10 fade-up min-w-0">
+          <div id="post-meta" class="mb-6"></div>
+          <div id="post-content" class="fade-up"></div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ── ABOUT VIEW ── -->
+    <div id="about-view" class="page-view hidden max-w-2xl mx-auto">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-12 fade-up">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16l4-8 3 6 2-4 3 4"/>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-black text-slate-800">About CoreStock</h2>
+            <p class="text-sky-500 text-sm font-semibold">Stock Market Insights</p>
+          </div>
+        </div>
+        <p class="text-slate-600 leading-relaxed mb-4">CoreStock is a straightforward, fact-driven space for stock market basics, market education, and clear daily updates. No hype, no predictions — just honest, well-structured content for investors at every level.</p>
+        <p class="text-slate-600 leading-relaxed mb-6">We believe financial literacy shouldn't be gated behind paywalls or buried in jargon. Every article here is written to be clear, accurate, and actionable.</p>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          <div class="bg-sky-50 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-sky-600" id="stat-posts">0</div>
+            <div class="text-xs text-slate-500 mt-0.5">Articles</div>
+          </div>
+          <div class="bg-emerald-50 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-emerald-600" id="stat-cats">4</div>
+            <div class="text-xs text-slate-500 mt-0.5">Categories</div>
+          </div>
+          <div class="bg-violet-50 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-violet-600" id="stat-tags">0</div>
+            <div class="text-xs text-slate-500 mt-0.5">Tags</div>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 text-center">
+            <div class="text-2xl font-black text-amber-600">📈</div>
+            <div class="text-xs text-slate-500 mt-0.5">Live Data</div>
+          </div>
+        </div>
+
+        <!-- Categories breakdown -->
+        <h3 class="font-bold text-slate-700 text-sm mb-3">Our Categories</h3>
+        <div class="space-y-2.5 mb-6">
+          <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
+            <span class="text-xl">🏠</span>
+            <div><p class="text-sm font-bold text-slate-700">Home</p><p class="text-xs text-slate-500">All articles and the latest posts</p></div>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
+            <span class="text-xl">📈</span>
+            <div><p class="text-sm font-bold text-slate-700">Trending</p><p class="text-xs text-slate-500">Popular market basics and foundational topics</p></div>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
+            <span class="text-xl">📰</span>
+            <div><p class="text-sm font-bold text-slate-700">Market Updates</p><p class="text-xs text-slate-500">Concise, noise-free daily market recaps</p></div>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
+            <span class="text-xl">🎓</span>
+            <div><p class="text-sm font-bold text-slate-700">Basics</p><p class="text-xs text-slate-500">How markets work, risk, order types, psychology</p></div>
+          </div>
+          <div class="flex items-center gap-3 bg-slate-50 rounded-xl p-3">
+            <span class="text-xl">📊</span>
+            <div><p class="text-sm font-bold text-slate-700">Business</p><p class="text-xs text-slate-500">Technical, fundamental, earnings, sector reviews</p></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 rounded-xl p-4 text-white text-xs leading-relaxed">
+          <strong class="text-sky-400">⚠️ Disclaimer:</strong> CoreStock is for <strong>educational purposes only</strong>. Nothing here constitutes financial advice. Always do your own research before making investment decisions.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="bg-slate-900 text-white mt-8 pt-12 pb-6 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-2.5 mb-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M7 16l4-8 3 6 2-4 3 4"/>
+              </svg>
+            </div>
+            <span class="font-black text-lg">Core<span class="text-sky-400">Stock</span></span>
+          </div>
+          <p class="text-slate-400 text-xs leading-relaxed">A fact-driven space for stock market basics, education, and daily updates.</p>
+          <div class="mt-4">
+            <h4 class="font-bold text-sm mb-3 text-slate-300">Follow Us</h4>
+            <div class="flex flex-wrap gap-3">
+              <a href="https://www.instagram.com/corestock.official" target="_blank" rel="noreferrer" aria-label="Instagram" class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800/60 px-3 py-2 text-xs text-slate-300 hover:border-sky-400 hover:text-sky-300 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <circle cx="17.5" cy="6.5" r="1"></circle>
+                </svg>
+                Instagram
+              </a>
+              <a href="https://www.youtube.com/@corestock.official" target="_blank" rel="noreferrer" aria-label="YouTube" class="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800/60 px-3 py-2 text-xs text-slate-300 hover:border-sky-400 hover:text-sky-300 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M23 7.5a3 3 0 0 0-2.1-2.1C18.7 5 12 5 12 5s-6.7 0-8.9.4A3 3 0 0 0 1 7.5C.6 9.7.6 12 .6 12s0 2.3.4 4.5A3 3 0 0 0 3.1 18.6C5.3 19 12 19 12 19s6.7 0 8.9-.4a3 3 0 0 0 2.1-2.1c.4-2.2.4-4.5.4-4.5s0-2.3-.4-4.5ZM9.8 15.1V8.9L15.5 12l-5.7 3.1Z"/>
+                </svg>
+                YouTube
+              </a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm mb-3 text-slate-300">Categories</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><button onclick="showFeed()" class="hover:text-sky-400 transition">🏠 Home</button></li>
+            <li><button onclick="filterCat('Market Basics')" class="hover:text-sky-400 transition">📈 Trending</button></li>
+            <li><button onclick="filterCat('Daily Updates')" class="hover:text-sky-400 transition">📰 Market Updates</button></li>
+            <li><button onclick="filterCat('Market Education')" class="hover:text-sky-400 transition">🎓 Basics</button></li>
+            <li><button onclick="filterCat('Analysis')" class="hover:text-sky-400 transition">📊 Business</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm mb-3 text-slate-300">Quick Links</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><button onclick="showFeed()" class="hover:text-sky-400 transition">🏠 Home</button></li>
+            <li><button onclick="showAbout()" class="hover:text-sky-400 transition">ℹ️ About</button></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 pt-5 flex items-center justify-center text-xs text-slate-500 text-center">
+        <p>© 2026 CoreStock — Stock Market Insights</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       JAVASCRIPT ENGINE
+  ══════════════════════════════════════ -->
+  <script>
+    /* ─── State ─── */
+    let allPosts = [];
+    let activeTag = null;
+    let activeCat = null;
+    let searchQuery = '';
+    let currentPage = 1;
+    const postsPerPage = 6;
+    let activeViewId = 'feed-view';
+    let feedTransitionPending = false;
+    let feedRenderSeq = 0;
+    const thumbnailCache = new Map();
+    const thumbnailPromises = new Map();
+    const defaultFeatureImage = location.origin + '/assets/featured-image.svg';
+
+    /* ─── Boot ─── */
+    async function boot() {
+      try {
+        const res = await fetch('posts.json?_=' + Date.now());
+        if (!res.ok) throw new Error('posts.json not found');
+        allPosts = await res.json();
+        allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        buildSidebar();
+        handleRoute();
+      } catch (e) {
+        document.getElementById('loading-indicator').innerHTML =
+          `<div class="bg-red-50 border border-red-200 text-red-600 rounded-xl p-6 text-sm max-w-lg mx-auto">
+            <strong>⚠️ Could not load posts.json</strong><br>${e.message}<br>
+            <span class="text-red-400 text-xs block mt-1">Run from a local server: <code>npx serve .</code></span>
+           </div>`;
+      }
+    }
+
+    function normalizePath(path) {
+      if (!path || path === '/') return '/';
+      return '/' + path.replace(/^\/+|\/+$/g, '');
+    }
+
+    function getPostFromPath() {
+      const path = normalizePath(location.pathname);
+      if (path === '/' || path === '/index.html') return null;
+      const id = decodeURIComponent(path.slice(1));
+      return allPosts.find(p => p.id === id) || null;
+    }
+
+    function handleRoute() {
+      const hash = location.hash;
+      if (hash.startsWith('#post/')) {
+        const id = decodeURIComponent(hash.slice(6));
+        history.replaceState(null, '', `/${encodeURIComponent(id)}`);
+      } else if (hash === '#about') {
+        history.replaceState(null, '', '/about');
+      }
+
+      const path = normalizePath(location.pathname);
+      if (path === '/about') { renderAboutPage(); return; }
+
+      const post = getPostFromPath();
+      if (post) { openPost(post); return; }
+
+      renderFeedPage();
+    }
+    window.addEventListener('popstate', handleRoute);
+
+    /* ─── Mobile toggle ── */
+    function toggleMobile() {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    }
+
+    /* ─── Views ── */
+    function showFeed(options = {}) {
+      history.pushState(null, '', '/');
+      currentPage = 1;
+      renderFeedPage(options);
+    }
+
+    function showAbout(options = {}) {
+      history.pushState(null, '', '/about');
+      renderAboutPage(options);
+    }
+
+    function goToPost(id) {
+      const post = allPosts.find(p => p.id === id);
+      if (!post) return;
+      history.pushState(null, '', `/${encodeURIComponent(post.id)}`);
+      openPost(post);
+    }
+
+    function goToFeedPage(page) {
+      currentPage = page;
+      renderFeed();
+      scrollElementIntoView('posts-container');
+    }
+
+    function renderFeedPage(options = {}) {
+      setView('feed-view');
+      document.getElementById('hero-section').classList.remove('hidden');
+      document.getElementById('categories-section').classList.remove('hidden');
+      resetSeoToHome();
+      renderFeed();
+      if (options.scroll !== false) scrollPageToTop();
+    }
+
+    function renderAboutPage(options = {}) {
+      setView('about-view');
+      document.getElementById('loading-indicator').classList.add('hidden');
+      document.getElementById('hero-section').classList.add('hidden');
+      document.getElementById('categories-section').classList.add('hidden');
+      document.title = 'About CoreStock India | Stock Market Insights';
+      upsertMeta('meta[name="description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
+      upsertMeta('meta[property="og:title"]', 'About CoreStock India | Stock Market Insights');
+      upsertMeta('meta[property="og:description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
+      upsertMeta('meta[property="og:url"]', location.origin + '/about');
+      upsertMeta('meta[property="og:image"]', defaultFeatureImage);
+      upsertMeta('meta[property="og:type"]', 'website');
+      upsertMeta('meta[name="twitter:title"]', 'About CoreStock India | Stock Market Insights');
+      upsertMeta('meta[name="twitter:description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
+      upsertMeta('meta[name="twitter:image"]', defaultFeatureImage);
+      upsertCanonical(location.origin + '/about');
+      clearStructuredData('breadcrumb-schema');
+      clearStructuredData('article-schema');
+      const tags = new Set(allPosts.flatMap(p => p.tags || []));
+      document.getElementById('stat-posts').textContent = allPosts.length;
+      document.getElementById('stat-tags').textContent = tags.size;
+      if (options.scroll !== false) scrollPageToTop();
+    }
+
+    function setView(id) {
+      const views = ['feed-view','post-view','about-view'];
+      if (activeViewId === id) {
+        const current = document.getElementById(id);
+        if (current) current.classList.add('is-visible');
+        return;
+      }
+
+      const next = document.getElementById(id);
+      const current = document.getElementById(activeViewId);
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el && !el.classList.contains('page-view')) el.classList.add('page-view');
+      });
+
+      if (current) {
+        current.classList.remove('hidden');
+        current.classList.add('is-leaving');
+        current.classList.remove('is-visible');
+        window.setTimeout(() => {
+          current.classList.add('hidden');
+          current.classList.remove('is-leaving');
+        }, 280);
+      }
+
+      if (next) {
+        next.classList.remove('hidden');
+        next.classList.remove('is-leaving');
+        requestAnimationFrame(() => next.classList.add('is-visible'));
+      }
+      activeViewId = id;
+    }
+
+    /* ─── Category filter ── */
+    function filterCat(cat) {
+      activeCat = cat;
+      activeTag = null;
+      currentPage = 1;
+      feedTransitionPending = true;
+      // Update pill active states
+      document.querySelectorAll('.cat-pill').forEach(el => {
+        const match = cat === null ? el.dataset.cat === 'all' : el.dataset.cat === cat;
+        el.classList.toggle('active', match);
+      });
+      updateCategoryDrawer(cat);
+      showFeed({ scroll: false });
+      // Scroll to the drawer or feed after it expands
+      setTimeout(() => {
+        const targetId = cat ? 'category-filter-drawer' : 'posts-container';
+        scrollElementIntoView(targetId);
+      }, 120);
+    }
+
+    /* ─── Feed render ── */
+    async function renderFeed() {
+      const renderSeq = ++feedRenderSeq;
+      const q = searchQuery.toLowerCase().trim();
+      let posts = allPosts.filter(p => {
+        const matchCat  = !activeCat || p.category === activeCat;
+        const matchTag  = !activeTag || (p.tags && p.tags.includes(activeTag));
+        const matchSearch = !q ||
+          p.title.toLowerCase().includes(q) ||
+          (p.excerpt || '').toLowerCase().includes(q) ||
+          (p.author || '').toLowerCase().includes(q) ||
+          (p.category || '').toLowerCase().includes(q) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(q));
+        return matchCat && matchTag && matchSearch;
+      });
+
+      const container = document.getElementById('posts-container');
+      const noResults = document.getElementById('no-results');
+      const countEl   = document.getElementById('posts-count');
+      const pagerEl   = document.getElementById('feed-pagination');
+      const loading   = document.getElementById('loading-indicator');
+      loading.classList.add('hidden');
+      updateCategoryDrawer(activeCat);
+      const containerHasCards = container.children.length > 0;
+      const shouldAnimate = feedTransitionPending && containerHasCards;
+
+      if (renderSeq !== feedRenderSeq) return;
+
+      if (shouldAnimate) container.classList.add('is-switching');
+
+      if (posts.length === 0) {
+        container.innerHTML = '';
+        noResults.classList.remove('hidden');
+        countEl.textContent = '';
+        pagerEl.innerHTML = '';
+      } else {
+        noResults.classList.add('hidden');
+        const label = activeCat ? ` in "${activeCat}"` : '';
+        const qlabel = q ? ` matching "${searchQuery}"` : '';
+        const totalPages = Math.max(1, Math.ceil(posts.length / postsPerPage));
+        currentPage = Math.min(currentPage, totalPages);
+        const start = (currentPage - 1) * postsPerPage;
+        const pagePosts = posts.slice(start, start + postsPerPage);
+        const thumbs = await Promise.all(pagePosts.map(p => getPostThumbnail(p)));
+        if (renderSeq !== feedRenderSeq) return;
+        const startNum = start + 1;
+        const endNum = start + pagePosts.length;
+        countEl.textContent = `${startNum}-${endNum} of ${posts.length} article${posts.length !== 1 ? 's' : ''}${label}${qlabel}`;
+        container.innerHTML = pagePosts.map((p, i) => cardHTML({ ...p, thumbnail: thumbs[i] }, start + i)).join('');
+        if (renderSeq !== feedRenderSeq) return;
+        pagerEl.innerHTML = `
+          <div class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white shadow-sm px-3 py-3">
+            ${[1,2,3,4].map(page => {
+              const active = page === currentPage;
+              const available = page <= totalPages;
+              const base = 'min-w-10 h-10 rounded-full text-sm font-bold transition border';
+              const state = active
+                ? 'bg-slate-900 text-white border-slate-900 shadow-md shadow-slate-900/15'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:text-sky-700';
+              const disabled = available ? '' : 'opacity-40 cursor-not-allowed';
+              return `<button ${available ? `onclick="goToFeedPage(${page})"` : 'disabled'} class="${base} ${state} ${disabled}">${page}</button>`;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      if (shouldAnimate) {
+        requestAnimationFrame(() => container.classList.remove('is-switching'));
+      } else {
+        container.classList.remove('is-switching');
+      }
+      feedTransitionPending = false;
+    }
+
+    /* ─── Category meta ── */
+    const catMeta = {
+      'Market Basics':    { icon:'📗', color:'emerald', bg:'bg-emerald-50', text:'text-emerald-700', border:'border-emerald-100' },
+      'Market Education': { icon:'🎓', color:'violet',  bg:'bg-violet-50',  text:'text-violet-700',  border:'border-violet-100'  },
+      'Daily Updates':    { icon:'📰', color:'sky',     bg:'bg-sky-50',     text:'text-sky-700',     border:'border-sky-100'     },
+      'Analysis':         { icon:'📊', color:'amber',   bg:'bg-amber-50',   text:'text-amber-700',   border:'border-amber-100'   },
+    };
+    function getCatMeta(cat) {
+      return catMeta[cat] || { icon:'📄', color:'slate', bg:'bg-slate-50', text:'text-slate-700', border:'border-slate-100' };
+    }
+
+    function getCategoryLabel(cat) {
+      const labels = {
+        'Market Basics': 'Trending',
+        'Market Education': 'Basics',
+        'Daily Updates': 'Market Updates',
+        'Analysis': 'Business',
+      };
+      return labels[cat] || cat || 'Article';
+    }
+
+    function toAbsoluteUrl(src, base = location.href) {
+      return new URL(src, base).href;
+    }
+
+    function extractFirstImageSrc(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const img = doc.querySelector('img');
+      return img ? img.getAttribute('src') : null;
+    }
+
+    async function getPostThumbnail(post) {
+      if (thumbnailCache.has(post.id)) return thumbnailCache.get(post.id);
+      if (thumbnailPromises.has(post.id)) return thumbnailPromises.get(post.id);
+
+      const promise = (async () => {
+        try {
+          const filePath = post.file.endsWith('.html') ? post.file : `${post.file}.html`;
+          const res = await fetch(`${filePath}?_=${Date.now()}`);
+          if (!res.ok) throw new Error(`File not found: ${filePath}`);
+          const html = await res.text();
+          const src = extractFirstImageSrc(html);
+          const baseUrl = new URL(filePath, location.href);
+          const thumb = src ? toAbsoluteUrl(src, baseUrl) : defaultFeatureImage;
+          thumbnailCache.set(post.id, thumb);
+          return thumb;
+        } catch (e) {
+          thumbnailCache.set(post.id, defaultFeatureImage);
+          return defaultFeatureImage;
+        } finally {
+          thumbnailPromises.delete(post.id);
+        }
+      })();
+      thumbnailPromises.set(post.id, promise);
+      return promise;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function getScrollBehavior() {
+      return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+    }
+
+    function scrollPageToTop() {
+      window.scrollTo({ top: 0, behavior: getScrollBehavior() });
+    }
+
+    function scrollElementIntoView(id, block = 'start') {
+      const target = document.getElementById(id);
+      if (!target) return;
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: getScrollBehavior(), block });
+      });
+    }
+
+    function scrollToPosts() {
+      scrollElementIntoView('posts-container');
+    }
+
+    function buildAdSlotHTML(position = 'Ad') {
+      return `
+        <div class="my-8 rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-4 sm:p-5">
+          <div class="min-h-[120px] rounded-2xl border border-slate-200 bg-white shadow-inner overflow-hidden">
+            <ins class="adsbygoogle block w-full h-full min-h-[120px]"
+                 style="display:block"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateCategoryDrawer(cat) {
+      const drawer = document.getElementById('category-filter-drawer');
+      if (!drawer) return;
+
+      if (!cat) {
+        drawer.style.maxHeight = '0px';
+        drawer.style.opacity = '0';
+        drawer.style.transform = 'translateY(-8px)';
+        drawer.style.pointerEvents = 'none';
+        drawer.style.marginBottom = '0px';
+        return;
+      }
+
+      drawer.style.marginBottom = '2rem';
+      drawer.style.maxHeight = '260px';
+      drawer.style.opacity = '1';
+      drawer.style.transform = 'translateY(0)';
+      drawer.style.pointerEvents = 'auto';
+    }
+
+    function upsertMeta(selector, content, attr = 'content') {
+      const el = document.querySelector(selector);
+      if (el) el.setAttribute(attr, content);
+    }
+
+    function upsertCanonical(url) {
+      let link = document.querySelector('link[rel="canonical"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'canonical';
+        document.head.appendChild(link);
+      }
+      link.href = url;
+    }
+
+    function setStructuredData(id, data) {
+      let script = document.getElementById(id);
+      if (!script) {
+        script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = id;
+        document.head.appendChild(script);
+      }
+      script.textContent = JSON.stringify(data);
+    }
+
+    function clearStructuredData(id) {
+      const script = document.getElementById(id);
+      if (script) script.remove();
+    }
+
+    function resetSeoToHome() {
+      document.title = 'CoreStock India | Indian Stock Market Insights';
+      upsertMeta('meta[name="description"]', 'CoreStock India is a straightforward, fact-driven space for Indian stock market basics, market education, and clear daily updates.');
+      upsertMeta('meta[property="og:title"]', 'CoreStock India | Indian Stock Market Insights');
+      upsertMeta('meta[property="og:description"]', 'Straightforward, fact-driven Indian stock market basics, education, and daily updates.');
+      upsertMeta('meta[property="og:url"]', location.origin + '/');
+      upsertMeta('meta[property="og:image"]', defaultFeatureImage);
+      upsertMeta('meta[property="og:type"]', 'website');
+      upsertMeta('meta[name="twitter:title"]', 'CoreStock India | Indian Stock Market Insights');
+      upsertMeta('meta[name="twitter:description"]', 'Straightforward, fact-driven Indian stock market basics, education, and daily updates.');
+      upsertMeta('meta[name="twitter:image"]', defaultFeatureImage);
+      upsertCanonical(location.origin + '/');
+      clearStructuredData('breadcrumb-schema');
+      clearStructuredData('article-schema');
+    }
+
+    function setPostSeo(post, image) {
+      const url = `${location.origin}/${encodeURIComponent(post.id)}`;
+      const categoryLabel = getCategoryLabel(post.category);
+      const description = post.excerpt || `Read ${post.title} on CoreStock India.`;
+      const metaImage = image || defaultFeatureImage;
+      document.title = `${post.title} | CoreStock India`;
+      upsertMeta('meta[name="description"]', description);
+      upsertMeta('meta[property="og:title"]', `${post.title} | CoreStock India`, 'content');
+      upsertMeta('meta[property="og:description"]', description, 'content');
+      upsertMeta('meta[property="og:url"]', url, 'content');
+      upsertMeta('meta[property="og:type"]', 'article', 'content');
+      upsertMeta('meta[property="og:image"]', metaImage, 'content');
+      upsertMeta('meta[name="twitter:title"]', `${post.title} | CoreStock India`, 'content');
+      upsertMeta('meta[name="twitter:description"]', description, 'content');
+      upsertMeta('meta[name="twitter:image"]', metaImage, 'content');
+      upsertCanonical(url);
+
+      setStructuredData('breadcrumb-schema', {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: location.origin + '/' },
+          { '@type': 'ListItem', position: 2, name: categoryLabel, item: location.origin + '/' },
+          { '@type': 'ListItem', position: 3, name: post.title, item: url }
+        ]
+      });
+
+      setStructuredData('article-schema', {
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline: post.title,
+        description,
+        author: {
+          '@type': 'Person',
+          name: post.author || 'CoreStock Team'
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'CoreStock India',
+          url: location.origin + '/'
+        },
+        datePublished: post.date,
+        dateModified: post.date,
+        mainEntityOfPage: url,
+        image: [metaImage]
+      });
+    }
+
+    function cardHTML(p, i) {
+      const cm = getCatMeta(p.category);
+      const thumbnail = p.thumbnail || defaultFeatureImage;
+      const tags = (p.tags || []).slice(0,3).map(t =>
+        `<button onclick="event.stopPropagation();filterByTag('${t}')" class="s-tag text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200 font-medium">${t}</button>`
+      ).join('');
+      return `
+        <div class="post-card bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden fade-up cursor-pointer flex flex-col" style="animation-delay:${i*55}ms" onclick="goToPost('${p.id}')">
+          <div class="relative">
+            <img src="${escapeHtml(thumbnail)}" alt="${escapeHtml(p.title)}" loading="lazy" class="w-full aspect-[16/9] object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent"></div>
+            <div class="absolute top-3 left-3 flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 text-xs font-bold ${cm.text} ${cm.bg} px-2.5 py-1 rounded-full border ${cm.border} shadow-sm backdrop-blur-sm">${cm.icon} ${p.category || 'Article'}</span>
+            </div>
+            <div class="absolute top-3 right-3">
+              <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold bg-white/90 text-slate-600 px-2.5 py-1 rounded-full shadow-sm backdrop-blur-sm">${formatDate(p.date)}</span>
+            </div>
+          </div>
+          <div class="p-5 flex flex-col flex-1">
+          <h2 class="text-base font-black text-slate-800 hover:text-sky-600 transition leading-snug mb-2 line-clamp-2">${p.title}</h2>
+          <p class="text-slate-500 text-xs leading-relaxed mb-3 flex-1 line-clamp-3">${p.excerpt || ''}</p>
+          <div class="flex items-center justify-between mt-auto pt-3 border-t border-slate-50 gap-2 flex-wrap">
+            <div class="flex gap-1 flex-wrap">${tags}</div>
+            <span class="flex items-center gap-1 text-xs text-slate-400 shrink-0">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              ${p.author || 'CoreStock'}
+            </span>
+          </div>
+          </div>
+        </div>`;
+    }
+
+    /* ─── Open post ── */
+    async function openPost(post) {
+      setView('post-view');
+      document.getElementById('loading-indicator').classList.add('hidden');
+      document.getElementById('hero-section').classList.add('hidden');
+      document.getElementById('categories-section').classList.add('hidden');
+      document.getElementById('post-content').innerHTML = '<div class="flex items-center justify-center py-20"><div class="w-8 h-8 border-4 border-sky-200 border-t-sky-500 rounded-full animate-spin"></div></div>';
+      const cm = getCatMeta(post.category);
+      const tags = (post.tags || []).map(t =>
+        `<button onclick="filterCat(null);filterByTag('${t}')" class="s-tag text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200 font-medium">${t}</button>`
+      ).join('');
+
+      document.getElementById('post-meta').innerHTML = `
+        <nav aria-label="Breadcrumb" class="mb-4">
+          <ol class="flex items-center gap-2 text-xs font-semibold text-slate-400 flex-wrap">
+            <li><button onclick="showFeed()" class="hover:text-sky-600 transition">Home</button></li>
+            <li aria-hidden="true" class="text-slate-300">/</li>
+            <li><button onclick="filterCat('${post.category}')" class="hover:text-sky-600 transition">${escapeHtml(getCategoryLabel(post.category))}</button></li>
+            <li aria-hidden="true" class="text-slate-300">/</li>
+            <li class="text-slate-500">${escapeHtml(post.title)}</li>
+          </ol>
+        </nav>
+        <div class="flex items-center gap-2 flex-wrap mb-3">
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold ${cm.text} ${cm.bg} px-2.5 py-1 rounded-full border ${cm.border}">${cm.icon} ${post.category || 'Article'}</span>
+          ${tags}
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight" style="font-family:'Merriweather',serif">${post.title}</h1>
+        <div class="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
+          <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><strong class="text-slate-600 font-semibold">${post.author || 'CoreStock'}</strong></span>
+          <span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${formatDate(post.date)}</span>
+        </div>
+        <hr class="mt-4 border-slate-100">`;
+
+      try {
+        // Always fetch the .html file for extensionless URLs
+        const filePath = post.file.endsWith('.html') ? post.file : `${post.file}.html`;
+        const res = await fetch(`${filePath}?_=${Date.now()}`);
+        if (!res.ok) throw new Error(`File not found: ${filePath}`);
+        const html = await res.text();
+        const featureSrc = extractFirstImageSrc(html);
+        const baseUrl = new URL(filePath, location.href);
+        const featureImage = featureSrc ? toAbsoluteUrl(featureSrc, baseUrl) : defaultFeatureImage;
+        thumbnailCache.set(post.id, featureImage);
+        setPostSeo(post, featureImage);
+        const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+        const content = (bodyMatch ? bodyMatch[1] : html)
+          .replace(/<img\b[^>]*>\s*/gi, '')
+          .replace(/<img\b[^>]*\/>\s*/gi, '');
+        document.getElementById('post-content').innerHTML = `
+          ${buildAdSlotHTML('Top')}
+          ${content}
+          ${buildAdSlotHTML('Bottom')}
+        `;
+      } catch(e) {
+        document.getElementById('post-content').innerHTML =
+          `<div class="bg-red-50 border border-red-200 text-red-600 rounded-xl p-5 text-sm"><strong>⚠️ Could not load post</strong><br>${e.message}</div>`;
+      }
+      scrollPageToTop();
+    }
+
+    /* ─── Tag filter ── */
+    function filterByTag(tag) {
+      activeTag = activeTag === tag ? null : tag;
+      activeCat = null;
+      feedTransitionPending = true;
+      document.querySelectorAll('.s-tag').forEach(el => {
+        el.classList.toggle('active', el.textContent.trim() === activeTag);
+      });
+      document.querySelectorAll('.cat-pill').forEach(el => {
+        el.classList.toggle('active', el.dataset.cat === 'all');
+      });
+      if (!document.getElementById('feed-view').classList.contains('hidden')) renderFeed();
+      else showFeed({ scroll: false });
+    }
+
+    /* ─── Sidebar ── */
+    function buildSidebar() {
+      // Recent
+      document.getElementById('recent-list').innerHTML = allPosts.slice(0,5).map(p => {
+        const cm = getCatMeta(p.category);
+        return `<li>
+          <button onclick="goToPost('${p.id}')" class="text-left group w-full flex items-start gap-2">
+            <span class="text-base mt-0.5">${cm.icon}</span>
+            <span class="flex-1">
+              <span class="text-xs font-bold text-slate-700 group-hover:text-sky-600 transition leading-snug block line-clamp-2">${p.title}</span>
+              <span class="text-xs text-slate-400">${formatDate(p.date)}</span>
+            </span>
+          </button>
+        </li>`;
+      }).join('');
+    }
+
+    /* ─── Search ── */
+    function handleSearch(val) {
+      searchQuery = val;
+      currentPage = 1;
+      ['search-input','search-mobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value !== val) el.value = val;
+      });
+      if (!document.getElementById('feed-view').classList.contains('hidden')) renderFeed();
+    }
+
+    /* ─── Format date ── */
+    function formatDate(str) {
+      if (!str) return '';
+      return new Date(str + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    }
+
+    boot();
+  </script>
+</body>
+</html>
