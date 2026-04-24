@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://corestock.neuraon.com/sitemap.xml

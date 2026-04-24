@@ -6,8 +6,16 @@
   <title>CoreStock India | Indian Stock Market Insights</title>
   <meta name="description" content="CoreStock India is a straightforward, fact-driven space for Indian stock market basics, market education, and clear daily updates."/>
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+  <meta name="author" content="CoreStock India"/>
+  <meta name="application-name" content="CoreStock India"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="format-detection" content="telephone=no"/>
   <link rel="canonical" href="/"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014545924257106" crossorigin="anonymous"></script>
   <meta property="og:site_name" content="CoreStock India"/>
+  <meta property="og:locale" content="en_IN"/>
   <meta property="og:type" content="website"/>
   <meta property="og:title" content="CoreStock India | Indian Stock Market Insights"/>
   <meta property="og:description" content="Straightforward, fact-driven Indian stock market basics, education, and daily updates."/>
@@ -490,6 +498,7 @@
     /* ─── Boot ─── */
     async function boot() {
       try {
+        updateSiteSchemas();
         const res = await fetch('posts.json?_=' + Date.now());
         if (!res.ok) throw new Error('posts.json not found');
         allPosts = await res.json();
@@ -582,14 +591,20 @@
       document.getElementById('categories-section').classList.add('hidden');
       document.title = 'About CoreStock India | Stock Market Insights';
       upsertMeta('meta[name="description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
+      upsertMeta('meta[name="author"]', 'CoreStock India');
       upsertMeta('meta[property="og:title"]', 'About CoreStock India | Stock Market Insights');
       upsertMeta('meta[property="og:description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
       upsertMeta('meta[property="og:url"]', location.origin + '/about');
+      upsertMeta('meta[property="og:locale"]', 'en_IN');
       upsertMeta('meta[property="og:image"]', defaultFeatureImage);
       upsertMeta('meta[property="og:type"]', 'website');
       upsertMeta('meta[name="twitter:title"]', 'About CoreStock India | Stock Market Insights');
       upsertMeta('meta[name="twitter:description"]', 'About CoreStock India and the mission behind its straightforward Indian stock market education.');
       upsertMeta('meta[name="twitter:image"]', defaultFeatureImage);
+      removeMeta('meta[property="article:published_time"]');
+      removeMeta('meta[property="article:modified_time"]');
+      removeMeta('meta[property="article:section"]');
+      removeMeta('meta[property="article:author"]');
       upsertCanonical(location.origin + '/about');
       clearStructuredData('breadcrumb-schema');
       clearStructuredData('article-schema');
@@ -820,11 +835,27 @@
           <div class="min-h-[120px] rounded-2xl border border-slate-200 bg-white shadow-inner overflow-hidden">
             <ins class="adsbygoogle block w-full h-full min-h-[120px]"
                  style="display:block"
+                 data-ad-client="ca-pub-8014545924257106"
+                 data-ad-slot="7915334568"
                  data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
+                 data-full-width-responsive="true"
+                 aria-label="${position} ad"></ins>
           </div>
         </div>
       `;
+    }
+
+    function renderAds() {
+      if (!window.adsbygoogle) return;
+      document.querySelectorAll('ins.adsbygoogle').forEach((slot) => {
+        if (slot.dataset.adsbygoogleStatus === 'done') return;
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          slot.dataset.adsbygoogleStatus = 'done';
+        } catch (e) {
+          // AdSense can reject repeated pushes during fast route changes.
+        }
+      });
     }
 
     function updateCategoryDrawer(cat) {
@@ -848,8 +879,21 @@
     }
 
     function upsertMeta(selector, content, attr = 'content') {
-      const el = document.querySelector(selector);
+      let el = document.querySelector(selector);
+      if (!el && selector.startsWith('meta[')) {
+        el = document.createElement('meta');
+        const match = selector.match(/meta\[(.+?)=["'](.+?)["']\]/);
+        if (match) {
+          el.setAttribute(match[1], match[2]);
+        }
+        document.head.appendChild(el);
+      }
       if (el) el.setAttribute(attr, content);
+    }
+
+    function removeMeta(selector) {
+      const el = document.querySelector(selector);
+      if (el) el.remove();
     }
 
     function upsertCanonical(url) {
@@ -878,17 +922,52 @@
       if (script) script.remove();
     }
 
+    function updateSiteSchemas() {
+      const origin = location.origin;
+      setStructuredData('site-schema', {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': `${origin}/#organization`,
+            name: 'CoreStock India',
+            url: `${origin}/`,
+            logo: `${origin}/assets/logo.png`,
+            sameAs: [
+              'https://www.instagram.com/corestock.official',
+              'https://www.youtube.com/@corestock.official'
+            ]
+          },
+          {
+            '@type': 'WebSite',
+            '@id': `${origin}/#website`,
+            name: 'CoreStock India',
+            url: `${origin}/`,
+            publisher: {
+              '@id': `${origin}/#organization`
+            }
+          }
+        ]
+      });
+    }
+
     function resetSeoToHome() {
       document.title = 'CoreStock India | Indian Stock Market Insights';
       upsertMeta('meta[name="description"]', 'CoreStock India is a straightforward, fact-driven space for Indian stock market basics, market education, and clear daily updates.');
+      upsertMeta('meta[name="author"]', 'CoreStock India');
       upsertMeta('meta[property="og:title"]', 'CoreStock India | Indian Stock Market Insights');
       upsertMeta('meta[property="og:description"]', 'Straightforward, fact-driven Indian stock market basics, education, and daily updates.');
       upsertMeta('meta[property="og:url"]', location.origin + '/');
+      upsertMeta('meta[property="og:locale"]', 'en_IN');
       upsertMeta('meta[property="og:image"]', defaultFeatureImage);
       upsertMeta('meta[property="og:type"]', 'website');
       upsertMeta('meta[name="twitter:title"]', 'CoreStock India | Indian Stock Market Insights');
       upsertMeta('meta[name="twitter:description"]', 'Straightforward, fact-driven Indian stock market basics, education, and daily updates.');
       upsertMeta('meta[name="twitter:image"]', defaultFeatureImage);
+      removeMeta('meta[property="article:published_time"]');
+      removeMeta('meta[property="article:modified_time"]');
+      removeMeta('meta[property="article:section"]');
+      removeMeta('meta[property="article:author"]');
       upsertCanonical(location.origin + '/');
       clearStructuredData('breadcrumb-schema');
       clearStructuredData('article-schema');
@@ -901,14 +980,20 @@
       const metaImage = image || defaultFeatureImage;
       document.title = `${post.title} | CoreStock India`;
       upsertMeta('meta[name="description"]', description);
+      upsertMeta('meta[name="author"]', post.author || 'CoreStock India');
       upsertMeta('meta[property="og:title"]', `${post.title} | CoreStock India`, 'content');
       upsertMeta('meta[property="og:description"]', description, 'content');
       upsertMeta('meta[property="og:url"]', url, 'content');
       upsertMeta('meta[property="og:type"]', 'article', 'content');
+      upsertMeta('meta[property="og:locale"]', 'en_IN', 'content');
       upsertMeta('meta[property="og:image"]', metaImage, 'content');
       upsertMeta('meta[name="twitter:title"]', `${post.title} | CoreStock India`, 'content');
       upsertMeta('meta[name="twitter:description"]', description, 'content');
       upsertMeta('meta[name="twitter:image"]', metaImage, 'content');
+      upsertMeta('meta[property="article:published_time"]', post.date, 'content');
+      upsertMeta('meta[property="article:modified_time"]', post.date, 'content');
+      upsertMeta('meta[property="article:section"]', categoryLabel, 'content');
+      upsertMeta('meta[property="article:author"]', post.author || 'CoreStock Team', 'content');
       upsertCanonical(url);
 
       setStructuredData('breadcrumb-schema', {
@@ -916,8 +1001,7 @@
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: location.origin + '/' },
-          { '@type': 'ListItem', position: 2, name: categoryLabel, item: location.origin + '/' },
-          { '@type': 'ListItem', position: 3, name: post.title, item: url }
+          { '@type': 'ListItem', position: 2, name: post.title, item: url }
         ]
       });
 
@@ -933,12 +1017,19 @@
         publisher: {
           '@type': 'Organization',
           name: 'CoreStock India',
-          url: location.origin + '/'
+          url: location.origin + '/',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${location.origin}/assets/logo.png`
+          }
         },
         datePublished: post.date,
         dateModified: post.date,
         mainEntityOfPage: url,
-        image: [metaImage]
+        image: [metaImage],
+        articleSection: categoryLabel,
+        keywords: (post.tags || []).join(', '),
+        inLanguage: 'en-IN'
       });
     }
 
@@ -1027,6 +1118,7 @@
           ${content}
           ${buildAdSlotHTML('Bottom')}
         `;
+        renderAds();
       } catch(e) {
         document.getElementById('post-content').innerHTML =
           `<div class="bg-red-50 border border-red-200 text-red-600 rounded-xl p-5 text-sm"><strong>⚠️ Could not load post</strong><br>${e.message}</div>`;
