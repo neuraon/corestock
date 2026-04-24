@@ -13,6 +13,13 @@
   <link rel="canonical" href="/"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJG2LYYX73"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DJG2LYYX73');
+  </script>
   <script>
     window.adsbygoogle = window.adsbygoogle || [];
   </script>
@@ -775,6 +782,18 @@
       return img ? img.getAttribute('src') : null;
     }
 
+    function lazyLoadImages(html) {
+      const doc = new DOMParser().parseFromString(`<div id="wrap">${html}</div>`, 'text/html');
+      const wrap = doc.getElementById('wrap');
+      if (!wrap) return html;
+      wrap.querySelectorAll('img').forEach((img, index) => {
+        img.setAttribute('loading', index === 0 ? 'eager' : 'lazy');
+        img.setAttribute('decoding', 'async');
+        img.setAttribute('fetchpriority', index === 0 ? 'high' : 'low');
+      });
+      return wrap.innerHTML;
+    }
+
     async function getPostThumbnail(post) {
       if (thumbnailCache.has(post.id)) return thumbnailCache.get(post.id);
       if (thumbnailPromises.has(post.id)) return thumbnailPromises.get(post.id);
@@ -1113,9 +1132,7 @@
         thumbnailCache.set(post.id, featureImage);
         setPostSeo(post, featureImage);
         const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-        const content = (bodyMatch ? bodyMatch[1] : html)
-          .replace(/<img\b[^>]*>\s*/gi, '')
-          .replace(/<img\b[^>]*\/>\s*/gi, '');
+        const content = lazyLoadImages(bodyMatch ? bodyMatch[1] : html);
         document.getElementById('post-content').innerHTML = `
           ${buildAdSlotHTML('Top')}
           ${content}

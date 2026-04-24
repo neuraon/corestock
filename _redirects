@@ -1,2 +1,4 @@
+/posts/:slug.html    /:slug    301
+/posts/:slug         /:slug    301
 /posts/*    /posts/:splat.html   200
 /*    /index.html   200
