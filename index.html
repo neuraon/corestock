@@ -13,6 +13,9 @@
   <link rel="canonical" href="/"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <script>
+    window.adsbygoogle = window.adsbygoogle || [];
+  </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014545924257106" crossorigin="anonymous"></script>
   <meta property="og:site_name" content="CoreStock India"/>
   <meta property="og:locale" content="en_IN"/>
@@ -846,11 +849,11 @@
     }
 
     function renderAds() {
-      if (!window.adsbygoogle) return;
+      window.adsbygoogle = window.adsbygoogle || [];
       document.querySelectorAll('ins.adsbygoogle').forEach((slot) => {
         if (slot.dataset.adsbygoogleStatus === 'done') return;
         try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          window.adsbygoogle.push({});
           slot.dataset.adsbygoogleStatus = 'done';
         } catch (e) {
           // AdSense can reject repeated pushes during fast route changes.
